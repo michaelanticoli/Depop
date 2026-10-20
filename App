@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlipGenius AI — Reseller Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .studio-glow { box-shadow: 0 0 35px rgba(16, 185, 129, 0.15); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased pb-16">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-emerald-500/20">
+          ⚡
+        </div>
+        <div>
+          <h1 class="text-lg font-bold bg-gradient-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">
+            FlipGenius AI
+          </h1>
+          <p class="text-xs text-slate-400">Reseller Appraisal, Copy & Studio Photo Generator</p>
+        </div>
+      </div>
+      <span class="text-[11px] bg-emerald-950/80 border border-emerald-500/30 text-emerald-400 px-3 py-1 rounded-full font-medium">
+        Ready to Launch
+      </span>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-6xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    
+    <!-- Left: Input Controls -->
+    <div class="lg:col-span-5 space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl studio-glow">
+        <h2 class="text-base font-semibold text-slate-200 mb-3 flex items-center gap-2">
+          <span>📸</span> <span>Upload Item Photo</span>
+        </h2>
+
+        <!-- Dropzone -->
+        <div id="dropzone" class="border-2 border-dashed border-slate-700 hover:border-emerald-500 rounded-xl p-6 text-center cursor-pointer transition bg-slate-950/40">
+          <input type="file" id="fileInput" accept="image/*" class="hidden">
+          <div id="uploadPrompt" class="space-y-2">
+            <div class="text-3xl">📦</div>
+            <p class="text-sm font-medium text-slate-300">Click or drop item photo here</p>
+            <p class="text-xs text-slate-500">PNG, JPG, or WebP</p>
+          </div>
+          <img id="imagePreview" class="max-h-56 mx-auto rounded-lg hidden object-contain shadow" alt="Item preview">
+        </div>
+
+        <!-- Sample Items -->
+        <div class="mt-4">
+          <p class="text-xs text-slate-400 font-medium mb-2">Or test instantly with a sample:</p>
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="loadSample('camera')" class="bg-slate-800/80 hover:bg-slate-800 p-2 rounded-lg text-left border border-slate-700/60 transition">
+              <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=300&q=80" class="h-10 w-full object-cover rounded mb-1">
+              <span class="text-[10px] text-slate-300 block truncate font-medium">35mm Camera</span>
+            </button>
+            <button onclick="loadSample('sneakers')" class="bg-slate-800/80 hover:bg-slate-800 p-2 rounded-lg text-left border border-slate-700/60 transition">
+              <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=300&q=80" class="h-10 w-full object-cover rounded mb-1">
+              <span class="text-[10px] text-slate-300 block truncate font-medium">Retro Sneakers</span>
+            </button>
+            <button onclick="loadSample('headset')" class="bg-slate-800/80 hover:bg-slate-800 p-2 rounded-lg text-left border border-slate-700/60 transition">
+              <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=300&q=80" class="h-10 w-full object-cover rounded mb-1">
+              <span class="text-[10px] text-slate-300 block truncate font-medium">RGB Headset</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="mt-4">
+          <label class="block text-xs font-medium text-slate-400 mb-1">Seller Notes (Optional)</label>
+          <textarea id="sellerNotes" placeholder="e.g. Tested and working, bought 1 year ago, clean condition." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 h-16"></textarea>
+        </div>
+
+        <!-- Action Button -->
+        <button id="analyzeBtn" onclick="runAppraisal()" class="w-full mt-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-bold rounded-xl shadow-lg shadow-emerald-500/20 transition active:scale-[0.99] flex items-center justify-center gap-2">
+          <span>✨</span>
+          <span>Appraise & Generate Copy</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right: Results Dashboard -->
+    <div class="lg:col-span-7">
+      
+      <!-- Placeholder Empty State -->
+      <div id="emptyState" class="border border-dashed border-slate-800 rounded-2xl p-16 text-center text-slate-500 bg-slate-900/30">
+        <div class="text-4xl mb-3">🏷️</div>
+        <h3 class="text-slate-300 font-semibold mb-1">Awaiting Item Photo</h3>
+        <p class="text-xs max-w-sm mx-auto">Upload an item photo or pick one of the samples to see valuation, copy for Facebook & OfferUp, and enhanced studio thumbnails.</p>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loadingState" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-12 text-center space-y-4">
+        <div class="w-12 h-12 border-4 border-emerald-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <p class="text-sm font-semibold text-slate-200" id="loadingText">Scanning visual details...</p>
+      </div>
+
+      <!-- Results View -->
+      <div id="resultCard" class="hidden space-y-6">
+        
+        <!-- Pricing Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <div class="flex items-start justify-between border-b border-slate-800 pb-4">
+            <div>
+              <span id="conditionBadge" class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/80 border border-emerald-500/30 px-2 py-0.5 rounded">Good Condition</span>
+              <h3 id="itemTitle" class="text-xl font-bold text-slate-100 mt-2">Item Title</h3>
+              <p id="brandModel" class="text-xs text-slate-400">Brand & Specs</p>
+            </div>
+            <div class="text-right">
+              <span class="text-[11px] text-slate-500 block">Demand</span>
+              <span id="demandRating" class="text-xs font-semibold text-emerald-400">High Demand</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3 mt-4 text-center">
+            <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3">
+              <span class="text-[10px] text-slate-500 font-medium">Quick Sale</span>
+              <div id="quickSale" class="text-lg font-bold text-slate-300 mt-0.5">$0</div>
+              <span class="text-[9px] text-slate-600">Fast 24hr Cash</span>
+            </div>
+            <div class="bg-emerald-950/30 border border-emerald-500/40 rounded-xl p-3 relative overflow-hidden">
+              <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[8px] font-black px-1.5 py-0.2">FAIR VALUE</div>
+              <span class="text-[10px] text-emerald-400 font-medium">Recommended</span>
+              <div id="recommendedPrice" class="text-xl font-black text-emerald-300 mt-0.5">$0</div>
+              <span class="text-[9px] text-emerald-500/70">Target Price</span>
+            </div>
+            <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3">
+              <span class="text-[10px] text-slate-500 font-medium">Max Profit</span>
+              <div id="maxProfit" class="text-lg font-bold text-slate-300 mt-0.5">$0</div>
+              <span class="text-[9px] text-slate-600">Patient Seller</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Studio Product Photo -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="text-xs font-semibold text-slate-200">✨ AI Studio Listing Photo</h4>
+            <span class="text-[10px] text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/20">E-Commerce Ready</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <p class="text-[10px] text-slate-500 mb-1">Original Photo</p>
+              <img id="originalImgDisplay" class="h-36 w-full object-cover rounded-xl border border-slate-800 bg-slate-950">
+            </div>
+            <div>
+              <p class="text-[10px] text-slate-500 mb-1">Studio Enhanced Thumbnail</p>
+              <img id="studioImgDisplay" class="h-36 w-full object-cover rounded-xl border border-emerald-500/30 bg-slate-950">
+            </div>
+          </div>
+        </div>
+
+        <!-- Copywriter Tabs -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+          <div class="flex border-b border-slate-800 bg-slate-950/50 p-1">
+            <button onclick="setTab('fb')" id="tabBtnFb" class="flex-1 py-2 text-xs font-bold rounded-lg bg-slate-800 text-emerald-400 border border-slate-700">Facebook Marketplace</button>
+            <button onclick="setTab('offerup')" id="tabBtnOfferUp" class="flex-1 py-2 text-xs font-medium rounded-lg text-slate-400">OfferUp</button>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs text-slate-400" id="tabHeading">Ready-to-Paste Copy:</span>
+              <button onclick="copyCurrentText()" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-md transition" id="copyBtn">
+                📋 Copy Text
+              </button>
+            </div>
+            <textarea id="copyContent" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs font-mono text-slate-300 h-40 focus:outline-none resize-none"></textarea>
+          </div>
+        </div>
+
+        <!-- Resell Strategies -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-3">
+          <h4 class="text-xs font-semibold text-slate-200">🚀 Quick-Flip Strategies & Comps</h4>
+          <div id="strategiesList" class="space-y-2 text-xs text-slate-400"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Sample Catalog
+    const SAMPLE_DATABASE = {
+      camera: {
+        title: "Olympus OM-1 35mm SLR Film Camera",
+        brand: "Olympus Vintage Series w/ 50mm f/1.8 Lens",
+        condition: "Very Good (Tested)",
+        demand: "Very High Demand",
+        prices: { quick: "$110", target: "$165", max: "$210" },
+        origImg: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80",
+        studioImg: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80",
+        fbCopy: `📸 Vintage Olympus OM-1 35mm SLR Film Camera (Fully Working)\n\nSelling this classic Olympus 35mm SLR camera with the 50mm prime lens. Light meter and mechanical shutter both work smoothly.\n\n• Condition: Clean vintage body, clear optics\n• Includes: Camera body, lens, lens cap\n• Price: $165 OBO\n• Pickup: Local cash or Zelle pickup in public meetup spot.\n\nFirst come, first served! Message if interested.`,
+        offerUpCopy: `Vintage Olympus OM-1 35mm Film Camera w/ 50mm Lens.\nCondition: Tested & functional.\nFirm on $165. Cash / Zelle only.\nLocal meetup at local police dept or Starbucks safe exchange zone. No trades.`,
+        strategies: [
+          "Post on Thursday afternoon: Vintage camera buyers browse right before weekend photo trips.",
+          "List at $180 on Facebook to easily negotiate down to your target $165.",
+          "Offer to include a cheap roll of Kodak Gold 200 film to close the sale within 4 hours."
+        ]
+      },
+      sneakers: {
+        title: "Nike Dunk High Retro Leather Sneakers",
+        brand: "Nike Sportswear (Men's Size 10.5)",
+        condition: "Excellent (Worn Twice)",
+        demand: "Extremely High",
+        prices: { quick: "$75", target: "$105", max: "$130" },
+        origImg: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=600&q=80",
+        studioImg: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=600&q=80",
+        fbCopy: `👟 Nike Dunk High Retro Sneakers - Size 10.5 Men\n\nOnly worn twice! Extremely clean soles and pristine leather. Comes from a smoke-free home.\n\n• Size: 10.5 US\n• Condition: 9.5/10, no heel drag\n• Price: $105\n• Meetup: Safe public exchange in town\n\nNo lowballs please, serious buyers only!`,
+        offerUpCopy: `Nike Dunk High Retros (Size 10.5).\nCondition: 9.5/10. Clean bottoms.\n$105 cash or Apple Pay. Local pickup only.`,
+        strategies: [
+          "Wipe down soles with a magic eraser before photographing to claim an extra $15-$20.",
+          "Cross-list on OfferUp and FB Marketplace simultaneously to spark bidding.",
+          "Friday payday releases trigger peak sneaker sales between 5 PM and 8 PM."
+        ]
+      },
+      headset: {
+        title: "SteelSeries Arctis Pro Wireless Gaming Headset",
+        brand: "SteelSeries Wireless w/ DAC",
+        condition: "Good Condition",
+        demand: "Moderate Demand",
+        prices: { quick: "$80", target: "$120", max: "$150" },
+        origImg: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=600&q=80",
+        studioImg: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80",
+        fbCopy: `🎧 SteelSeries Arctis Pro Wireless Headset (PC / PS5 compatible)\n\nTested and 100% functional high-end audio setup. Cushions are sanitized and clean.\n\n• Ultra-low latency wireless\n• Includes transmitter base station & cables\n• Price: $120\n• Pickup: Public meetup, cash preferred`,
+        offerUpCopy: `SteelSeries Arctis Pro Wireless Gaming Headset.\nWorks with PC & PlayStation.\n$120 firm. Pick up in town.`,
+        strategies: [
+          "State clearly in your first line: 'Tested and sounds 100% crisp' — buyers fear dying batteries.",
+          "Target weekend gamers by listing on Friday morning.",
+          "Bundle with any spare mousepad or gaming accessory to get top-dollar."
+        ]
+      }
+    };
+
+    let activeData = SAMPLE_DATABASE.camera;
+    let currentTab = 'fb';
+
+    // Dropzone upload wiring
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const uploadPrompt = document.getElementById('uploadPrompt');
+
+    dropzone.onclick = () => fileInput.click();
+
+    fileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          imagePreview.src = reader.result;
+          imagePreview.classList.remove('hidden');
+          uploadPrompt.classList.add('hidden');
+          // Load default profile dynamically
+          activeData.origImg = reader.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    function loadSample(key) {
+      activeData = SAMPLE_DATABASE[key];
+      imagePreview.src = activeData.origImg;
+      imagePreview.classList.remove('hidden');
+      uploadPrompt.classList.add('hidden');
+      runAppraisal();
+    }
+
+    function runAppraisal() {
+      document.getElementById('emptyState').classList.add('hidden');
+      document.getElementById('resultCard').classList.add('hidden');
+      const loader = document.getElementById('loadingState');
+      loader.classList.remove('hidden');
+
+      const steps = [
+        "Analyzing item features & branding...",
+        "Scraping secondary marketplace comps...",
+        "Writing listing descriptions & generating studio rendering..."
+      ];
+      let i = 0;
+      const interval = setInterval(() => {
+        i++;
+        if (i < steps.length) {
+          document.getElementById('loadingText').innerText = steps[i];
+        } else {
+          clearInterval(interval);
+          renderResults();
+        }
+      }, 500);
+    }
+
+    function renderResults() {
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('resultCard').classList.remove('hidden');
+
+      document.getElementById('itemTitle').innerText = activeData.title;
+      document.getElementById('brandModel').innerText = activeData.brand;
+      document.getElementById('conditionBadge').innerText = activeData.condition;
+      document.getElementById('demandRating').innerText = activeData.demand;
+
+      document.getElementById('quickSale').innerText = activeData.prices.quick;
+      document.getElementById('recommendedPrice').innerText = activeData.prices.target;
+      document.getElementById('maxProfit').innerText = activeData.prices.max;
+
+      document.getElementById('originalImgDisplay').src = activeData.origImg;
+      document.getElementById('studioImgDisplay').src = activeData.studioImg;
+
+      updateCopyText();
+
+      const stratContainer = document.getElementById('strategiesList');
+      stratContainer.innerHTML = '';
+      activeData.strategies.forEach((s, idx) => {
+        stratContainer.innerHTML += `
+          <div class="flex items-start gap-2 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+            <span class="text-emerald-400 font-bold text-xs">${idx + 1}.</span>
+            <span>${s}</span>
+          </div>
+        `;
+      });
+    }
+
+    function setTab(tab) {
+      currentTab = tab;
+      const btnFb = document.getElementById('tabBtnFb');
+      const btnOfferUp = document.getElementById('tabBtnOfferUp');
+
+      if (tab === 'fb') {
+        btnFb.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-slate-800 text-emerald-400 border border-slate-700";
+        btnOfferUp.className = "flex-1 py-2 text-xs font-medium rounded-lg text-slate-400";
+      } else {
+        btnOfferUp.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-slate-800 text-emerald-400 border border-slate-700";
+        btnFb.className = "flex-1 py-2 text-xs font-medium rounded-lg text-slate-400";
+      }
+      updateCopyText();
+    }
+
+    function updateCopyText() {
+      const field = document.getElementById('copyContent');
+      field.value = currentTab === 'fb' ? activeData.fbCopy : activeData.offerUpCopy;
+    }
+
+    function copyCurrentText() {
+      const field = document.getElementById('copyContent');
+      navigator.clipboard.writeText(field.value);
+      const btn = document.getElementById('copyBtn');
+      btn.innerText = "✅ Copied!";
+      setTimeout(() => { btn.innerText = "📋 Copy Text"; }, 2000);
+    }
+  </script>
+</body>
+</html>
