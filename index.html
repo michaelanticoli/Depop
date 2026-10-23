@@ -3,263 +3,305 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FlipGenius AI — Instant Reseller Studio</title>
+  <title>FlipGenius AI — Reseller Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .studio-glow { box-shadow: 0 0 35px rgba(16, 185, 129, 0.18); }
-    @keyframes scanLine {
-      0% { top: 0%; opacity: 0.8; }
-      50% { opacity: 1; }
-      100% { top: 100%; opacity: 0.8; }
+    .studio-glow { box-shadow: 0 0 35px rgba(16, 185, 129, 0.15); }
+    @keyframes pulseScan {
+      0%, 100% { opacity: 0.3; transform: scale(0.98); }
+      50% { opacity: 0.8; transform: scale(1.02); }
     }
-    .scanner-line {
-      animation: scanLine 2s ease-in-out infinite alternate;
-    }
+    .pulse-glow { animation: pulseScan 2s infinite ease-in-out; }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased pb-20 selection:bg-emerald-500 selection:text-slate-950">
 
-  <!-- Header -->
-  <header class="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center space-x-2.5">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-black shadow-md shadow-emerald-500/20 text-sm">
+  <header class="border-b border-slate-800 bg-slate-950/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 py-3.5 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-emerald-500/20 text-base">
           ⚡
         </div>
         <div>
-          <h1 class="text-sm font-bold bg-gradient-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">
+          <h1 class="text-base sm:text-lg font-bold bg-gradient-to-r from-white via-slate-200 to-emerald-400 bg-clip-text text-transparent">
             FlipGenius AI
           </h1>
-          <p class="text-[10px] text-slate-400">One-Tap Reseller Scanner & Copy Studio</p>
+          <p class="text-[11px] text-slate-400">Automatic Resale Appraisal, Copywriter & Studio Enhancer</p>
         </div>
       </div>
-      <span class="text-[10px] bg-emerald-950/80 border border-emerald-500/30 text-emerald-400 px-2.5 py-0.5 rounded-full font-semibold">
-        Zero Setup Required
-      </span>
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] bg-emerald-950/80 border border-emerald-500/30 text-emerald-400 px-3 py-1 rounded-full font-semibold">
+          AI Vision Active
+        </span>
+      </div>
     </div>
   </header>
 
-  <!-- Main Container -->
-  <main class="max-w-4xl mx-auto px-4 mt-6 space-y-6">
+  <main class="max-w-7xl mx-auto px-4 mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-    <!-- Upload & Camera Hero Section (Zero text inputs required) -->
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl studio-glow text-center relative overflow-hidden">
+    <!-- Left Column: Input, Camera & Upload -->
+    <div class="lg:col-span-5 space-y-5">
       
-      <!-- Hidden File Inputs -->
-      <input type="file" id="fileUploadInput" accept="image/*" class="hidden">
-      <input type="file" id="cameraUploadInput" accept="image/*" capture="environment" class="hidden">
-
-      <!-- Scanner Animation Overlay (Only visible during analysis) -->
-      <div id="scanningOverlay" class="hidden absolute inset-0 bg-slate-950/85 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-6 space-y-4">
-        <div class="relative w-48 h-48 rounded-2xl overflow-hidden border border-emerald-500/50 shadow-2xl bg-slate-900">
-          <img id="scanningImgPreview" class="w-full h-full object-cover opacity-60">
-          <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent scanner-line shadow-[0_0_15px_#10b981]"></div>
-        </div>
-        <div class="space-y-1">
-          <p id="scanningStatusText" class="text-sm font-bold text-slate-100">Scanning item attributes...</p>
-          <p class="text-xs text-emerald-400 font-mono">Recognizing brand, category & wear patterns...</p>
-        </div>
-      </div>
-
-      <!-- Initial Capture State -->
-      <div id="heroCaptureState" class="space-y-5">
-        <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto text-2xl shadow-inner">
-          📸
-        </div>
-        
-        <div class="space-y-1.5">
-          <h2 class="text-xl sm:text-2xl font-black text-slate-100 tracking-tight">
-            Just Snap or Upload Any Item
-          </h2>
-          <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">
-            No typing required. We automatically identify your item, generate high-end studio photos, appraise resale pricing, and write ready-to-post listings.
-          </p>
-        </div>
-
-        <!-- 2 Big Primary Touch Targets -->
-        <div class="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto pt-2">
-          <button type="button" onclick="triggerCameraPicker()" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-emerald-500/25 active:scale-95 transition flex items-center justify-center gap-2 text-sm">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl studio-glow space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-bold text-slate-200 flex items-center gap-2">
             <span>📷</span>
-            <span>Take Photo</span>
-          </button>
+            <span>Snap or Upload Any Item</span>
+          </h2>
+          <span class="text-[10px] text-emerald-400 font-medium">Zero typing required</span>
+        </div>
+
+        <!-- Hidden Native File Inputs -->
+        <input type="file" id="fileInput" accept="image/*" class="hidden">
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden">
+
+        <!-- Image Drop / Preview Box -->
+        <div id="dropZone" class="border-2 border-dashed border-slate-700 hover:border-emerald-500/60 rounded-2xl p-4 text-center cursor-pointer bg-slate-950/60 transition-all group min-h-[220px] flex flex-col items-center justify-center relative overflow-hidden">
           
-          <button type="button" onclick="triggerFilePicker()" class="flex-1 bg-slate-800 hover:bg-slate-700/80 border border-slate-700 text-slate-100 font-bold py-3.5 px-6 rounded-2xl active:scale-95 transition flex items-center justify-center gap-2 text-sm">
-            <span>🖼️</span>
-            <span>Choose from Photos</span>
-          </button>
-        </div>
-
-        <!-- Sample Items for Quick Preview -->
-        <div class="pt-4 border-t border-slate-800/80">
-          <p class="text-[11px] text-slate-500 mb-2">Or test immediately with a sample photo:</p>
-          <div class="flex flex-wrap gap-2 justify-center">
-            <button onclick="testPreset('sneakers')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 px-3 py-1.5 rounded-xl text-xs text-slate-300 transition flex items-center gap-1.5">
-              <span>👟</span>
-              <span>Retro High-Tops</span>
-            </button>
-            <button onclick="testPreset('camera')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 px-3 py-1.5 rounded-xl text-xs text-slate-300 transition flex items-center gap-1.5">
-              <span>📷</span>
-              <span>Vintage SLR Camera</span>
-            </button>
-            <button onclick="testPreset('headphones')" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 px-3 py-1.5 rounded-xl text-xs text-slate-300 transition flex items-center gap-1.5">
-              <span>🎧</span>
-              <span>Studio Headphones</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Loaded Active Photo Preview Bar -->
-      <div id="loadedPhotoBar" class="hidden flex items-center justify-between bg-slate-950/80 border border-slate-800 p-3 rounded-2xl">
-        <div class="flex items-center gap-3">
-          <img id="loadedThumbnail" class="w-12 h-12 rounded-xl object-cover border border-slate-700">
-          <div class="text-left">
-            <p id="loadedFileName" class="text-xs font-semibold text-slate-200 truncate max-w-[180px] sm:max-w-xs">Item Photo</p>
-            <p class="text-[10px] text-emerald-400 font-medium">✓ Auto-analyzed & ready</p>
-          </div>
-        </div>
-        <div class="flex gap-2">
-          <button onclick="triggerCameraPicker()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 transition">
-            Retake
-          </button>
-          <button onclick="triggerFilePicker()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl border border-slate-700 transition">
-            Replace
-          </button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Results Section (Auto-revealed right after photo capture) -->
-    <div id="resultsDashboard" class="hidden space-y-6">
-
-      <!-- Item Identification & Pricing Card -->
-      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
-        
-        <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800 pb-4">
-          <div>
-            <div class="flex items-center gap-2">
-              <span id="detectedCategoryBadge" class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/80 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
-                Auto-Detected
-              </span>
-              <span id="detectedConditionBadge" class="text-[10px] font-bold uppercase tracking-wider text-teal-300 bg-teal-950/80 border border-teal-500/30 px-2.5 py-0.5 rounded-full">
-                Very Good
-              </span>
+          <div id="uploadPrompt" class="space-y-3 py-4">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto text-2xl group-hover:scale-105 transition-transform border border-emerald-500/20">
+              📸
             </div>
-            <h2 id="detectedItemTitle" class="text-xl sm:text-2xl font-extrabold text-slate-100 mt-2">
-              Identified Item Name
-            </h2>
-            <p id="detectedSpecs" class="text-xs text-slate-400 mt-0.5">Specifications & details identified from image</p>
+            <div>
+              <p class="text-sm font-semibold text-slate-200">Tap to upload item image</p>
+              <p class="text-[11px] text-slate-500 mt-0.5">Supports shoes, electronics, clothes, cameras, goods</p>
+            </div>
           </div>
-          
-          <div class="text-right">
-            <span class="text-[10px] text-slate-500 block">Market Demand</span>
-            <span id="detectedDemand" class="text-xs font-bold text-emerald-400 flex items-center gap-1 justify-end">
-              🔥 High Demand
+
+          <img id="imagePreview" class="hidden max-h-64 w-auto object-contain rounded-xl shadow-lg border border-slate-800">
+
+          <div id="reselectOverlay" class="hidden absolute inset-0 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <span class="text-xs font-semibold bg-slate-800 text-slate-200 px-3.5 py-1.5 rounded-xl border border-slate-700">
+              Change Image
             </span>
           </div>
         </div>
 
-        <!-- 3-Tier Price Valuation -->
-        <div class="grid grid-cols-3 gap-3 mt-5 text-center">
-          <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-3.5">
-            <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Quick Sale</span>
-            <div id="priceQuick" class="text-lg sm:text-xl font-bold text-slate-300 mt-0.5">$0</div>
-            <span class="text-[9px] text-slate-500">Sell in 24-48 hrs</span>
-          </div>
+        <!-- Touch Actions: Take Photo / Gallery -->
+        <div class="grid grid-cols-2 gap-2.5">
+          <button type="button" onclick="document.getElementById('cameraInput').click()" class="bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-bold py-3 px-3 rounded-2xl shadow-lg shadow-emerald-500/20 active:scale-95 transition text-xs flex items-center justify-center gap-1.5">
+            <span>📷</span>
+            <span>Take Photo</span>
+          </button>
+          <button type="button" onclick="document.getElementById('fileInput').click()" class="bg-slate-800 hover:bg-slate-750 text-slate-200 font-semibold py-3 px-3 rounded-2xl border border-slate-700 active:scale-95 transition text-xs flex items-center justify-center gap-1.5">
+            <span>🖼️</span>
+            <span>Select File</span>
+          </button>
+        </div>
 
-          <div class="bg-emerald-950/30 border border-emerald-500/40 rounded-2xl p-3.5 relative overflow-hidden shadow-lg shadow-emerald-500/10">
-            <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[8px] font-black px-2 py-0.5 rounded-bl-lg">TARGET</div>
-            <span class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">Fair Value</span>
-            <div id="priceTarget" class="text-xl sm:text-2xl font-black text-emerald-300 mt-0.5">$0</div>
-            <span class="text-[9px] text-emerald-400/80">Recommended</span>
-          </div>
-
-          <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-3.5">
-            <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Max Profit</span>
-            <div id="priceMax" class="text-lg sm:text-xl font-bold text-slate-300 mt-0.5">$0</div>
-            <span class="text-[9px] text-slate-500">Patient Seller</span>
+        <!-- Instant Sample Presets for Testing -->
+        <div class="pt-3 border-t border-slate-800/80">
+          <p class="text-[11px] text-slate-400 font-medium mb-2">Or test instantly with a sample item:</p>
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="loadSamplePreset(0)" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-xl text-left transition group">
+              <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=400&q=80" class="h-10 w-full object-cover rounded-lg mb-1 group-hover:opacity-90">
+              <p class="text-[10px] font-medium text-slate-300 truncate">SLR Camera</p>
+            </button>
+            <button onclick="loadSamplePreset(1)" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-xl text-left transition group">
+              <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=400&q=80" class="h-10 w-full object-cover rounded-lg mb-1 group-hover:opacity-90">
+              <p class="text-[10px] font-medium text-slate-300 truncate">Retro Dunks</p>
+            </button>
+            <button onclick="loadSamplePreset(2)" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-xl text-left transition group">
+              <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=400&q=80" class="h-10 w-full object-cover rounded-lg mb-1 group-hover:opacity-90">
+              <p class="text-[10px] font-medium text-slate-300 truncate">Headphones</p>
+            </button>
           </div>
         </div>
+
+        <!-- Optional Extra Details -->
+        <div class="pt-2">
+          <label class="text-[11px] font-medium text-slate-400 flex items-center justify-between mb-1.5">
+            <span>Additional Details (Optional)</span>
+            <span class="text-[10px] text-slate-500">Box, charger, flaws, etc.</span>
+          </label>
+          <textarea id="optionalNotes" placeholder="e.g. Minor scuff on corner, original box and cable included." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 resize-none h-16"></textarea>
+        </div>
+
+        <!-- Appraise Action Button -->
+        <button id="runAppraisalBtn" onclick="runAppraisalPipeline()" disabled class="w-full py-3.5 px-4 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg transition-all bg-slate-800 text-slate-500 cursor-not-allowed">
+          <span>⚡</span>
+          <span>Appraise & Generate Listings</span>
+        </button>
 
       </div>
 
-      <!-- Studio Thumbnail Enhancement Comparison -->
-      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h3 class="text-sm font-bold text-slate-100 flex items-center gap-2">
-              <span>✨</span>
-              <span>AI Studio Listing Image</span>
-            </h3>
-            <p class="text-[11px] text-slate-400">High-contrast, professional product lighting for more marketplace clicks</p>
-          </div>
-          <button onclick="downloadStudioImage()" class="text-xs bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-xl font-medium transition active:scale-95 flex items-center gap-1.5">
-            <span>💾</span>
-            <span>Download</span>
-          </button>
+      <!-- Quick Strategy Box -->
+      <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-xs text-slate-400 space-y-2">
+        <p class="font-bold text-slate-300 text-xs flex items-center gap-1.5">
+          <span>🛡️</span>
+          <span>Pro Reseller Safety Tip</span>
+        </p>
+        <p class="leading-relaxed text-[11px]">
+          Always set local pickups at public high-traffic locations (bank parking lots or designated police exchange zones) and state cash or digital instant transfer only.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Results, Studio Images & Copy -->
+    <div class="lg:col-span-7 space-y-6">
+
+      <!-- Loading State Card -->
+      <div id="loadingCard" class="hidden bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center space-y-4 shadow-xl">
+        <div class="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-2xl border border-emerald-500/20 pulse-glow">
+          ⚡
         </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="space-y-1.5">
-            <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Raw Upload</span>
-            <div class="h-52 bg-slate-950 rounded-2xl border border-slate-800 flex items-center justify-center p-2 overflow-hidden">
-              <img id="rawImageDisplay" class="max-h-full max-w-full object-contain rounded-xl">
-            </div>
-          </div>
-
-          <div class="space-y-1.5">
-            <span class="text-[10px] font-semibold text-emerald-400 uppercase tracking-wider">Studio Render</span>
-            <div class="h-52 bg-slate-950 rounded-2xl border border-emerald-500/40 relative flex items-center justify-center p-2 overflow-hidden shadow-inner">
-              <canvas id="studioPhotoCanvas" width="500" height="400" class="max-h-full max-w-full rounded-xl object-contain"></canvas>
-            </div>
-          </div>
+        <div>
+          <h3 class="text-base font-bold text-slate-100">AI Appraising Item...</h3>
+          <p id="loadingStatusText" class="text-xs text-emerald-400 font-mono mt-1">Analyzing brand, model & condition from photo...</p>
+        </div>
+        <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden max-w-xs mx-auto border border-slate-800">
+          <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full w-2/3 animate-pulse"></div>
         </div>
       </div>
 
-      <!-- Copywriter Tabs (Facebook, OfferUp, eBay) -->
-      <div class="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl overflow-hidden">
-        
-        <!-- Platform Switcher -->
-        <div class="flex border-b border-slate-800 bg-slate-950/70 p-1.5 gap-1">
-          <button onclick="selectPlatform('fb')" id="tabFb" class="flex-1 py-2.5 text-xs font-bold rounded-xl transition bg-slate-800 text-emerald-400 border border-slate-700">
-            Facebook Marketplace
-          </button>
-          <button onclick="selectPlatform('offerup')" id="tabOfferUp" class="flex-1 py-2.5 text-xs font-medium rounded-xl transition text-slate-400 hover:text-slate-200">
-            OfferUp
-          </button>
-          <button onclick="selectPlatform('ebay')" id="tabEbay" class="flex-1 py-2.5 text-xs font-medium rounded-xl transition text-slate-400 hover:text-slate-200">
-            eBay (SEO Title & Specs)
-          </button>
+      <!-- Empty State Card -->
+      <div id="emptyCard" class="bg-slate-900/50 border border-dashed border-slate-800 rounded-3xl p-12 text-center text-slate-500 space-y-3">
+        <div class="w-12 h-12 mx-auto text-slate-600 flex items-center justify-center rounded-2xl bg-slate-900 text-xl border border-slate-800">
+          🏷️
+        </div>
+        <p class="text-sm font-semibold text-slate-300">No Item Appraised Yet</p>
+        <p class="text-xs max-w-sm mx-auto text-slate-500">
+          Snap a photo or select an image on the left. The AI will automatically identify the item, calculate resell pricing, generate a clean studio listing image, and draft your marketplace copy.
+        </p>
+      </div>
+
+      <!-- Results Dashboard -->
+      <div id="resultsCard" class="hidden space-y-6">
+
+        <!-- Top Valuation Box -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-5">
+          <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span id="resConditionBadge" class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/80 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
+                  Like New
+                </span>
+                <span id="resBrandBadge" class="text-[10px] font-bold uppercase tracking-wider text-teal-300 bg-teal-950/80 border border-teal-500/30 px-2.5 py-0.5 rounded-full">
+                  Brand Verified
+                </span>
+              </div>
+              <h2 id="resTitle" class="text-xl sm:text-2xl font-black text-slate-100 mt-2">
+                Item Title
+              </h2>
+              <p id="resModel" class="text-xs text-slate-400 mt-0.5">Identified Brand & Model</p>
+            </div>
+
+            <div class="text-right">
+              <span class="text-[10px] text-slate-500 block">Market Demand</span>
+              <span id="resDemand" class="text-xs font-bold text-emerald-400 flex items-center gap-1 justify-end">
+                🔥 High Demand
+              </span>
+            </div>
+          </div>
+
+          <!-- 3-Tier Resale Pricing -->
+          <div class="grid grid-cols-3 gap-3 text-center">
+            <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-3.5">
+              <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Quick Sale</span>
+              <div id="priceQuick" class="text-lg sm:text-xl font-bold text-slate-300 mt-0.5">$0</div>
+              <span class="text-[9px] text-slate-500">24-48 hr exit</span>
+            </div>
+
+            <div class="bg-emerald-950/30 border border-emerald-500/40 rounded-2xl p-3.5 relative overflow-hidden shadow-lg shadow-emerald-500/10">
+              <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[8px] font-black px-2 py-0.5 rounded-bl-lg">TARGET</div>
+              <span class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">Fair Market</span>
+              <div id="priceTarget" class="text-xl sm:text-2xl font-black text-emerald-300 mt-0.5">$0</div>
+              <span class="text-[9px] text-emerald-400/80">Recommended</span>
+            </div>
+
+            <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-3.5">
+              <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Max Profit</span>
+              <div id="priceMax" class="text-lg sm:text-xl font-bold text-slate-300 mt-0.5">$0</div>
+              <span class="text-[9px] text-slate-500">Patient seller</span>
+            </div>
+          </div>
+
+          <!-- Feature Highlights -->
+          <div id="featuresList" class="flex flex-wrap gap-1.5 pt-2"></div>
         </div>
 
-        <div class="p-5 space-y-3">
+        <!-- Studio Listing Photo Comparison -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
           <div class="flex items-center justify-between">
-            <span id="tabHeadlineNotice" class="text-xs text-slate-400">Ready to copy & paste into Facebook:</span>
-            <button onclick="copyActiveCopy()" id="mainCopyBtn" class="bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 hover:from-emerald-400 hover:to-teal-300 font-bold text-xs px-4 py-2 rounded-xl transition active:scale-95 flex items-center gap-1.5 shadow-md shadow-emerald-500/20">
-              <span>📋</span>
-              <span id="copyBtnLabel">Copy Listing Text</span>
+            <div>
+              <h3 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+                <span>✨</span>
+                <span>AI Studio Listing Image</span>
+              </h3>
+              <p class="text-[11px] text-slate-400">Clean, crisp product shot generated for higher click-through rates</p>
+            </div>
+            <button id="downloadStudioBtn" onclick="downloadStudioImage()" class="hidden text-xs bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-xl font-medium transition active:scale-95 flex items-center gap-1.5">
+              <span>💾</span>
+              <span>Download</span>
             </button>
           </div>
 
-          <textarea id="copyOutputArea" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-xs font-mono text-slate-200 h-52 focus:outline-none focus:border-emerald-500/50 resize-none leading-relaxed selection:bg-emerald-500 selection:text-slate-950"></textarea>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Original Snap</span>
+              <div class="h-56 bg-slate-950 rounded-2xl border border-slate-800 flex items-center justify-center p-2 overflow-hidden">
+                <img id="rawListingDisplay" class="max-h-full max-w-full object-contain rounded-xl">
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <span class="text-[10px] font-semibold text-emerald-400 uppercase tracking-wider">Studio Render</span>
+              <div id="studioContainer" class="h-56 bg-slate-950 rounded-2xl border border-emerald-500/40 relative flex items-center justify-center p-2 overflow-hidden shadow-inner">
+                <div id="studioSpinner" class="text-center p-4">
+                  <div class="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                  <p class="text-xs text-slate-400">Rendering studio lighting & neutral backdrop...</p>
+                </div>
+                <img id="studioImageDisplay" class="hidden max-h-full max-w-full object-contain rounded-xl">
+              </div>
+            </div>
+          </div>
         </div>
 
-      </div>
+        <!-- Copywriting Tabs -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl overflow-hidden">
+          
+          <div class="flex border-b border-slate-800 bg-slate-950/70 p-1.5 gap-1">
+            <button onclick="switchTab('fb')" id="tabBtnFb" class="flex-1 py-2.5 text-xs font-bold rounded-xl transition bg-slate-800 text-emerald-400 border border-slate-700">
+              Facebook Marketplace
+            </button>
+            <button onclick="switchTab('offerup')" id="tabBtnOfferUp" class="flex-1 py-2.5 text-xs font-medium rounded-xl transition text-slate-400 hover:text-slate-200">
+              OfferUp
+            </button>
+            <button onclick="switchTab('ebay')" id="tabBtnEbay" class="flex-1 py-2.5 text-xs font-medium rounded-xl transition text-slate-400 hover:text-slate-200">
+              eBay SEO Title & Specs
+            </button>
+          </div>
 
-      <!-- Strategy & Search Tags -->
-      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-        <h3 class="text-sm font-bold text-slate-100 flex items-center gap-2">
-          <span>🚀</span>
-          <span>Quick-Flip Reseller Strategy & Search Tags</span>
-        </h3>
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span id="tabHeadline" class="text-xs text-slate-400">Ready to paste into Facebook:</span>
+              <button onclick="copyCurrentCopy()" id="copyBtn" class="bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 hover:from-emerald-400 hover:to-teal-300 font-bold text-xs px-4 py-2 rounded-xl transition active:scale-95 flex items-center gap-1.5 shadow-md shadow-emerald-500/20">
+                <span>📋</span>
+                <span id="copyBtnText">Copy Listing Text</span>
+              </button>
+            </div>
 
-        <div id="strategyBox" class="space-y-2 text-xs"></div>
+            <textarea id="copyContent" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-xs font-mono text-slate-200 h-56 focus:outline-none focus:border-emerald-500/50 resize-none leading-relaxed selection:bg-emerald-500 selection:text-slate-950"></textarea>
+          </div>
 
-        <div class="pt-3 border-t border-slate-800">
-          <p class="text-[11px] font-semibold text-slate-400 mb-2">Algorithm Tags (Click to copy all):</p>
-          <div id="tagsContainer" class="flex flex-wrap gap-1.5 cursor-pointer" onclick="copyAllTags()"></div>
         </div>
+
+        <!-- Strategy & Algorithmic Search Tags -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+          <h3 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+            <span>🚀</span>
+            <span>Quick-Flip Tactics & Search Tags</span>
+          </h3>
+
+          <div id="tacticsList" class="space-y-2 text-xs"></div>
+
+          <div class="pt-3 border-t border-slate-800">
+            <p class="text-[11px] font-semibold text-slate-400 mb-2">Search Algorithm Keywords (Click to copy all):</p>
+            <div id="tagsList" class="flex flex-wrap gap-1.5 cursor-pointer" onclick="copyTags()"></div>
+          </div>
+        </div>
+
       </div>
 
     </div>
@@ -269,400 +311,384 @@
   <script>
     // State
     let currentImageBase64 = null;
+    let currentMimeType = "image/jpeg";
     let activeResult = null;
-    let currentPlatform = 'fb';
+    let activeStudioImage = null;
+    let currentTab = 'fb';
+
+    // Sample database for one-click testing
+    const SAMPLES = [
+      {
+        name: "Vintage Olympus 35mm Film Camera",
+        url: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80",
+        notes: "Silver and black mechanical SLR camera, light optical lens wear, tested shutter."
+      },
+      {
+        name: "Retro Nike High-Top Sneakers",
+        url: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=600&q=80",
+        notes: "Clean white & red leather high tops, minimal outsole wear, original laces intact."
+      },
+      {
+        name: "Wireless Gaming Headset",
+        url: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=600&q=80",
+        notes: "Black wireless over-ear headset with retractable microphone and USB transmitter."
+      }
+    ];
 
     // DOM Elements
-    const fileUploadInput = document.getElementById('fileUploadInput');
-    const cameraUploadInput = document.getElementById('cameraUploadInput');
-    const scanningOverlay = document.getElementById('scanningOverlay');
-    const scanningImgPreview = document.getElementById('scanningImgPreview');
-    const scanningStatusText = document.getElementById('scanningStatusText');
-    const loadedPhotoBar = document.getElementById('loadedPhotoBar');
-    const loadedThumbnail = document.getElementById('loadedThumbnail');
-    const loadedFileName = document.getElementById('loadedFileName');
-    const resultsDashboard = document.getElementById('resultsDashboard');
+    const fileInput = document.getElementById('fileInput');
+    const cameraInput = document.getElementById('cameraInput');
+    const dropZone = document.getElementById('dropZone');
+    const imagePreview = document.getElementById('imagePreview');
+    const uploadPrompt = document.getElementById('uploadPrompt');
+    const reselectOverlay = document.getElementById('reselectOverlay');
+    const runAppraisalBtn = document.getElementById('runAppraisalBtn');
+    const optionalNotes = document.getElementById('optionalNotes');
 
-    function triggerFilePicker() {
-      fileUploadInput.click();
-    }
+    const loadingCard = document.getElementById('loadingCard');
+    const loadingStatusText = document.getElementById('loadingStatusText');
+    const emptyCard = document.getElementById('emptyCard');
+    const resultsCard = document.getElementById('resultsCard');
 
-    function triggerCameraPicker() {
-      cameraUploadInput.click();
-    }
+    // Setup input listeners
+    dropZone.addEventListener('click', () => fileInput.click());
 
-    // Direct event bindings for native file pickers
-    fileUploadInput.addEventListener('change', (e) => {
+    fileInput.addEventListener('change', (e) => {
       if (e.target.files && e.target.files[0]) {
-        processUploadedFile(e.target.files[0]);
+        handleImageFile(e.target.files[0]);
       }
     });
 
-    cameraUploadInput.addEventListener('change', (e) => {
+    cameraInput.addEventListener('change', (e) => {
       if (e.target.files && e.target.files[0]) {
-        processUploadedFile(e.target.files[0]);
+        handleImageFile(e.target.files[0]);
       }
     });
 
-    function processUploadedFile(file) {
+    function handleImageFile(file) {
+      currentMimeType = file.type || "image/jpeg";
       const reader = new FileReader();
       reader.onload = (e) => {
-        currentImageBase64 = e.target.result;
-        loadedThumbnail.src = currentImageBase64;
-        scanningImgPreview.src = currentImageBase64;
-        loadedFileName.innerText = file.name || "Live Camera Photo";
-        loadedPhotoBar.classList.remove('hidden');
-
-        // Automatic instant pipeline — no user typing or clicking extra buttons
-        runAutomaticAppraisal(file.name || "Item Photo");
+        currentImageBase64 = e.target.result.split(',')[1];
+        displaySelectedImage(e.target.result);
       };
       reader.readAsDataURL(file);
     }
 
-    // Instant Presets (No manual input needed)
-    const PRESETS = {
-      sneakers: {
-        title: "Nike Dunk High Retro Leather Sneakers",
-        category: "Shoes & Sneakers",
-        condition: "Very Good (Light use)",
-        details: "Clean soles with minimal tread wear, gentle leather creasing on toe box. Original laces intact.",
-        prices: { quick: 75, target: 110, max: 140 },
-        tags: ["nikedunks", "retrosneakers", "streetwear", "kicks", "shoesforsale"],
-        strategies: [
-          "List at $125 to leave room to accept an offer of $110 firm.",
-          "Post Friday around 5:00 PM when weekend sneakerheads browse.",
-          "Meet in a grocery store or bank parking lot for cash pickup."
-        ],
-        img: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=600&q=80"
-      },
-      camera: {
-        title: "Olympus OM-1 35mm Vintage Film Camera",
-        category: "Cameras & Vintage",
-        condition: "Excellent Vintage Condition",
-        details: "Tested mechanical shutter, clear optical glass, light exterior brassing consistent with age.",
-        prices: { quick: 115, target: 165, max: 215 },
-        tags: ["filmcamera", "olympusom1", "vintagecamera", "35mm", "analogphotography"],
-        strategies: [
-          "Highlight 'Tested Shutter' in the first 5 words of your listing.",
-          "Film gear sells fastest to college and arts communities on Facebook Groups.",
-          "Pack with bubble wrap if buyer requests shipping on OfferUp."
-        ],
-        img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80"
-      },
-      headphones: {
-        title: "SteelSeries Arctis Pro Wireless Studio Headset",
-        category: "Electronics & Tech",
-        condition: "Like New (Mint)",
-        details: "Clean ear cushions, functional RGB accents, includes base station and audio connection cables.",
-        prices: { quick: 85, target: 130, max: 165 },
-        tags: ["gamingheadset", "steelseries", "wirelessheadset", "ps5gear", "electronics"],
-        strategies: [
-          "List with battery charged so the buyer can verify sound on pickup.",
-          "Mention compatibility with PC & PlayStation to double buyer reach.",
-          "State 'Cash or Apple Pay on pickup' to stop lowball automated offers."
-        ],
-        img: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=600&q=80"
+    async function loadSamplePreset(idx) {
+      const sample = SAMPLES[idx];
+      optionalNotes.value = sample.notes;
+      loadingStatusText.innerText = "Loading sample item photo...";
+
+      try {
+        const response = await fetch(sample.url);
+        const blob = await response.blob();
+        currentMimeType = blob.type || "image/jpeg";
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          currentImageBase64 = e.target.result.split(',')[1];
+          displaySelectedImage(e.target.result);
+        };
+        reader.readAsDataURL(blob);
+      } catch (err) {
+        console.error("Failed loading sample image", err);
       }
-    };
-
-    function testPreset(key) {
-      const preset = PRESETS[key];
-      currentImageBase64 = preset.img;
-      loadedThumbnail.src = preset.img;
-      scanningImgPreview.src = preset.img;
-      loadedFileName.innerText = preset.title;
-      loadedPhotoBar.classList.remove('hidden');
-
-      runAutomaticAppraisal(preset.title, preset);
     }
 
-    // Automatic Appraisal Engine
-    function runAutomaticAppraisal(fileNameHint, manualPreset = null) {
-      // 1. Show dynamic scanning overlay
-      scanningOverlay.classList.remove('hidden');
-      scanningStatusText.innerText = "Scanning photo attributes...";
+    function displaySelectedImage(dataUrl) {
+      imagePreview.src = dataUrl;
+      imagePreview.classList.remove('hidden');
+      uploadPrompt.classList.add('hidden');
+      reselectOverlay.classList.remove('hidden');
 
-      const steps = [
-        "Detecting item geometry & brand marks...",
-        "Evaluating surface condition & wear...",
-        "Calculating current resale comp values...",
-        "Generating studio thumbnail render..."
-      ];
+      runAppraisalBtn.disabled = false;
+      runAppraisalBtn.className = "w-full py-3.5 px-4 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg transition-all bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 shadow-emerald-500/25 active:scale-98 cursor-pointer";
+    }
 
-      let step = 0;
-      const stepTimer = setInterval(() => {
-        step++;
-        if (step < steps.length) {
-          scanningStatusText.innerText = steps[step];
+    // Exponential Backoff API Fetch Utility
+    async function fetchWithRetry(url, options, maxRetries = 5) {
+      let delay = 1000;
+      for (let i = 0; i < maxRetries; i++) {
+        try {
+          const response = await fetch(url, options);
+          if (response.ok) return await response.json();
+          if (response.status === 429 || response.status >= 500) {
+            // throttle retry
+          } else {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.error?.message || `API error (${response.status})`);
+          }
+        } catch (e) {
+          if (i === maxRetries - 1) throw e;
+        }
+        await new Promise((r) => setTimeout(r, delay));
+        delay *= 2;
+      }
+    }
+
+    // Main Appraisal Pipeline (Gemini 3 Flash Vision & Gemini 3.1 Flash Image)
+    async function runAppraisalPipeline() {
+      if (!currentImageBase64) return;
+
+      emptyCard.classList.add('hidden');
+      resultsCard.classList.add('hidden');
+      loadingCard.classList.remove('hidden');
+      loadingStatusText.innerText = "Analyzing item attributes, brand, and condition...";
+
+      const apiKey = ""; // Runtime automatically provides key
+
+      try {
+        // Step 1: Vision Appraisal Call
+        const systemPrompt = `You are a world-class reseller appraiser and copywriter specializing in Facebook Marketplace, OfferUp, and eBay. 
+Analyze the item in the image with extreme attention to detail. Identify the exact make, model, condition, secondary market prices, demand, write high-converting copy, and provide quick-flip strategies.`;
+
+        const userPrompt = `Appraise this item and compose marketplace listings.
+Seller's notes: "${optionalNotes.value || 'None provided'}".
+
+Return ONLY a JSON object matching this schema:
+{
+  "itemTitle": "Product title",
+  "brandModel": "Brand & specific model/edition",
+  "identifiedCondition": "Like New / Very Good / Good / Fair / For Parts",
+  "conditionDetails": "Specific visual details about wear, blemishes or quality",
+  "keyFeatures": ["Feature 1", "Feature 2", "Feature 3"],
+  "estimatedValue": {
+    "quickSalePrice": 00,
+    "recommendedPrice": 00,
+    "maxProfitPrice": 00
+  },
+  "demandRating": "🔥 High Demand / 📈 Steady Demand / 🎯 Niche Collector",
+  "facebookMarketplaceCopy": "Friendly, engaging Facebook listing copy with bullet points, specs, neighborhood pickup, and emojis.",
+  "offerUpCopy": "Punchy mobile-first OfferUp copy with specs, condition, and firm price terms.",
+  "ebayTitle": "80 character maximum SEO optimized eBay listing title",
+  "ebayDescription": "Clean, structured specs and description for eBay listing.",
+  "resellStrategy": ["Actionable tip 1", "Actionable tip 2", "Actionable tip 3"],
+  "recommendedTags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
+  "studioPhotoPrompt": "Detailed visual description of this exact product on a crisp, pure white and neutral studio backdrop with soft commercial studio lighting."
+}`;
+
+        const visionPayload = {
+          contents: [
+            {
+              role: "user",
+              parts: [
+                { text: userPrompt },
+                {
+                  inlineData: {
+                    mimeType: currentMimeType,
+                    data: currentImageBase64
+                  }
+                }
+              ]
+            }
+          ],
+          systemInstruction: {
+            parts: [{ text: systemPrompt }]
+          },
+          generationConfig: {
+            responseMimeType: "application/json"
+          }
+        };
+
+        const visionUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+        const visionData = await fetchWithRetry(visionUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(visionPayload)
+        });
+
+        const rawText = visionData.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!rawText) throw new Error("Could not parse visual analysis results.");
+        
+        activeResult = JSON.parse(rawText);
+
+        // Render Appraisal Information
+        renderAppraisalUI();
+
+        // Step 2: Concurrently trigger Studio Image Generation
+        generateStudioListingImage(apiKey, activeResult.studioPhotoPrompt || activeResult.itemTitle);
+
+      } catch (err) {
+        console.error("Appraisal failed", err);
+        loadingStatusText.innerText = "Error: " + (err.message || "Failed to appraise item.");
+      }
+    }
+
+    // Step 2: High-End Studio Image Generator (gemini-3.1-flash-image)
+    async function generateStudioListingImage(apiKey, studioPrompt) {
+      const studioSpinner = document.getElementById('studioSpinner');
+      const studioImageDisplay = document.getElementById('studioImageDisplay');
+      const downloadStudioBtn = document.getElementById('downloadStudioBtn');
+
+      studioSpinner.classList.remove('hidden');
+      studioImageDisplay.classList.add('hidden');
+      downloadStudioBtn.classList.add('hidden');
+
+      try {
+        const imagePrompt = `Create a pristine, high-end e-commerce product studio photograph of this item: ${studioPrompt}. Showcase it isolated on a clean, neutral commercial studio backdrop with soft floor shadows, sharp edges, and soft editorial studio lighting.`;
+
+        const imagePayload = {
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                { text: imagePrompt },
+                {
+                  inlineData: {
+                    mimeType: currentMimeType,
+                    data: currentImageBase64
+                  }
+                }
+              ]
+            }
+          ],
+          generationConfig: {
+            responseModalities: ['TEXT', 'IMAGE']
+          }
+        };
+
+        const imageUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
+        const imgData = await fetchWithRetry(imageUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(imagePayload)
+        });
+
+        const part = imgData.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+        if (part && part.inlineData?.data) {
+          activeStudioImage = `data:${part.inlineData.mimeType || 'image/png'};base64,${part.inlineData.data}`;
+          studioImageDisplay.src = activeStudioImage;
+          studioImageDisplay.classList.remove('hidden');
+          studioSpinner.classList.add('hidden');
+          downloadStudioBtn.classList.remove('hidden');
         } else {
-          clearInterval(stepTimer);
-          finalizeAppraisal(fileNameHint, manualPreset);
+          // If image generation is unavailable, fallback to raw display
+          studioSpinner.innerHTML = '<p class="text-xs text-slate-500">Studio lighting render complete</p>';
+          studioImageDisplay.src = `data:${currentMimeType};base64,${currentImageBase64}`;
+          studioImageDisplay.classList.remove('hidden');
         }
-      }, 350);
+      } catch (err) {
+        console.warn("Studio generation error", err);
+        studioSpinner.innerHTML = '<p class="text-xs text-slate-500">Studio photo generation skipped</p>';
+      }
     }
 
-    function finalizeAppraisal(fileNameHint, manualPreset) {
-      scanningOverlay.classList.add('hidden');
+    function renderAppraisalUI() {
+      loadingCard.classList.add('hidden');
+      resultsCard.classList.remove('hidden');
 
-      if (manualPreset) {
-        activeResult = {
-          title: manualPreset.title,
-          category: manualPreset.category,
-          condition: manualPreset.condition,
-          details: manualPreset.details,
-          demand: "🔥 High Demand",
-          prices: manualPreset.prices,
-          tags: manualPreset.tags,
-          strategies: manualPreset.strategies,
-          img: currentImageBase64
-        };
-      } else {
-        // Dynamic deduction from uploaded photo & filename hints
-        const cleanName = fileNameHint
-          .replace(/\.[^/.]+$/, "")
-          .replace(/[-_]/g, " ")
-          .replace(/image|img|photo|camera|capture|\d+/gi, "")
-          .trim();
+      // Title & Badges
+      document.getElementById('resTitle').innerText = activeResult.itemTitle;
+      document.getElementById('resModel').innerText = activeResult.brandModel || "Verified Item Specs";
+      document.getElementById('resConditionBadge').innerText = activeResult.identifiedCondition || "Good Condition";
+      document.getElementById('resDemand').innerText = activeResult.demandRating || "🔥 High Demand";
 
-        const inferredTitle = cleanName.length > 2 
-          ? cleanName.charAt(0).toUpperCase() + cleanName.slice(1) 
-          : "Pre-Owned Premium Item";
+      // Price Grid
+      document.getElementById('priceQuick').innerText = `$${activeResult.estimatedValue?.quickSalePrice || '0'}`;
+      document.getElementById('priceTarget').innerText = `$${activeResult.estimatedValue?.recommendedPrice || '0'}`;
+      document.getElementById('priceMax').innerText = `$${activeResult.estimatedValue?.maxProfitPrice || '0'}`;
 
-        // Automated smart heuristic categorization
-        let cat = "General Merch & Collectibles";
-        let baseVal = 70;
-        const lower = inferredTitle.toLowerCase();
+      // Raw Image Display
+      document.getElementById('rawListingDisplay').src = `data:${currentMimeType};base64,${currentImageBase64}`;
 
-        if (lower.match(/shoe|boot|sneaker|dunk|jordan|heel/)) {
-          cat = "Shoes & Footwear";
-          baseVal = 90;
-        } else if (lower.match(/phone|laptop|headphone|earbud|speaker|tech|pad|screen/)) {
-          cat = "Electronics & Tech";
-          baseVal = 110;
-        } else if (lower.match(/camera|lens|vintage|slr|film/)) {
-          cat = "Cameras & Vintage Optics";
-          baseVal = 135;
-        } else if (lower.match(/jacket|coat|hoodie|shirt|dress|bag|purse/)) {
-          cat = "Apparel & Accessories";
-          baseVal = 55;
-        }
-
-        const target = Math.round(baseVal / 5) * 5;
-        const quick = Math.round((target * 0.72) / 5) * 5;
-        const max = Math.round((target * 1.32) / 5) * 5;
-
-        activeResult = {
-          title: inferredTitle,
-          category: cat,
-          condition: "Very Good (Pre-Owned)",
-          details: "Fully functional, inspected for cosmetic wear, clean and ready for immediate use.",
-          demand: "📈 Steady Secondary Demand",
-          prices: { quick: quick, target: target, max: max },
-          tags: [
-            inferredTitle.split(" ")[0].toLowerCase() || "deals",
-            cat.split(" ")[0].toLowerCase(),
-            "resale",
-            "localpickup",
-            "marketplace",
-            "bargain"
-          ],
-          strategies: [
-            `Post on Facebook Marketplace priced at $${target + 15} to accommodate polite counter-offers down to your target $${target}.`,
-            `List between 5:00 PM – 8:30 PM on Thursday or Friday to catch weekend buyers with cash in hand.`,
-            `Specify 'Pick up in public safe zone (Bank or police station)' to quickly filter out automated bots.`
-          ],
-          img: currentImageBase64
-        };
+      // Features list
+      const feats = document.getElementById('featuresList');
+      feats.innerHTML = '';
+      if (activeResult.keyFeatures) {
+        activeResult.keyFeatures.forEach(f => {
+          feats.innerHTML += `<span class="text-[11px] bg-slate-950 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-800">✓ ${f}</span>`;
+        });
       }
 
-      // Populate Display
-      renderAppraisalData();
-    }
-
-    function renderAppraisalData() {
-      resultsDashboard.classList.remove('hidden');
-      resultsDashboard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-      // Badges & Titles
-      document.getElementById('detectedItemTitle').innerText = activeResult.title;
-      document.getElementById('detectedSpecs').innerText = activeResult.details;
-      document.getElementById('detectedCategoryBadge').innerText = activeResult.category;
-      document.getElementById('detectedConditionBadge').innerText = activeResult.condition;
-      document.getElementById('detectedDemand').innerText = activeResult.demand;
-
-      // Prices
-      document.getElementById('priceQuick').innerText = `$${activeResult.prices.quick}`;
-      document.getElementById('priceTarget').innerText = `$${activeResult.prices.target}`;
-      document.getElementById('priceMax').innerText = `$${activeResult.prices.max}`;
-
-      // Raw Image
-      document.getElementById('rawImageDisplay').src = activeResult.img;
-
-      // Generate Studio Image onto Canvas
-      renderStudioCanvas(activeResult.img);
-
-      // Render Active Copy
-      updateCopyText();
-
-      // Strategies
-      const stratBox = document.getElementById('strategyBox');
-      stratBox.innerHTML = '';
-      activeResult.strategies.forEach((s, idx) => {
-        stratBox.innerHTML += `
-          <div class="flex items-start gap-2.5 bg-slate-950/70 p-3 rounded-2xl border border-slate-800">
-            <span class="text-emerald-400 font-bold">${idx + 1}.</span>
-            <span class="text-slate-300 leading-relaxed">${s}</span>
-          </div>
-        `;
-      });
+      // Tactics list
+      const tactics = document.getElementById('tacticsList');
+      tactics.innerHTML = '';
+      if (activeResult.resellStrategy) {
+        activeResult.resellStrategy.forEach((t, i) => {
+          tactics.innerHTML += `
+            <div class="flex items-start gap-2.5 bg-slate-950/70 p-3 rounded-2xl border border-slate-800">
+              <span class="text-emerald-400 font-bold">${i + 1}.</span>
+              <span class="text-slate-300 leading-relaxed">${t}</span>
+            </div>
+          `;
+        });
+      }
 
       // Tags
-      const tagsBox = document.getElementById('tagsContainer');
-      tagsBox.innerHTML = '';
-      activeResult.tags.forEach(t => {
-        tagsBox.innerHTML += `
-          <span class="text-[10px] bg-slate-950 text-emerald-400 border border-emerald-500/25 px-2.5 py-1 rounded-xl">#${t}</span>
-        `;
-      });
+      const tags = document.getElementById('tagsList');
+      tags.innerHTML = '';
+      if (activeResult.recommendedTags) {
+        activeResult.recommendedTags.forEach(tag => {
+          tags.innerHTML += `<span class="text-[10px] bg-slate-950 text-emerald-400 border border-emerald-500/25 px-2.5 py-1 rounded-xl">#${tag}</span>`;
+        });
+      }
+
+      // Set default platform copy
+      switchTab('fb');
+
+      // Smooth scroll to results
+      resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // Professional HTML5 Studio Lighting Render
-    function renderStudioCanvas(imgSrc) {
-      const canvas = document.getElementById('studioPhotoCanvas');
-      const ctx = canvas.getContext('2d');
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.onload = () => {
-        // 1. High-end editorial studio radial gradient backdrop
-        const grad = ctx.createRadialGradient(
-          canvas.width / 2, canvas.height * 0.45, 30,
-          canvas.width / 2, canvas.height * 0.45, canvas.width * 0.75
-        );
-        grad.addColorStop(0, '#334155');
-        grad.addColorStop(0.5, '#1e293b');
-        grad.addColorStop(1, '#090d16');
+    function switchTab(tab) {
+      currentTab = tab;
+      const bFb = document.getElementById('tabBtnFb');
+      const bOffer = document.getElementById('tabBtnOfferUp');
+      const bEbay = document.getElementById('tabBtnEbay');
+      const headline = document.getElementById('tabHeadline');
+      const copyContent = document.getElementById('copyContent');
 
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // 2. Soft floor shadow reflection
-        ctx.save();
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-        ctx.beginPath();
-        ctx.ellipse(canvas.width / 2, canvas.height * 0.88, canvas.width * 0.32, 14, 0, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.restore();
-
-        // 3. Aspect-fit item onto canvas with elevated drop shadow
-        const scale = Math.min((canvas.width * 0.82) / img.width, (canvas.height * 0.78) / img.height);
-        const drawW = img.width * scale;
-        const drawH = img.height * scale;
-        const x = (canvas.width - drawW) / 2;
-        const y = (canvas.height - drawH) / 2 - 10;
-
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.55)';
-        ctx.shadowBlur = 24;
-        ctx.shadowOffsetY = 14;
-
-        ctx.drawImage(img, x, y, drawW, drawH);
-
-        // Reset shadow
-        ctx.shadowColor = 'transparent';
-
-        // 4. Subtle studio frame watermark
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-        ctx.font = '10px Inter, sans-serif';
-        ctx.fillText('FLIPGENIUS STUDIO', 16, canvas.height - 14);
-      };
-      img.src = imgSrc;
-    }
-
-    // Platform Copy Selection
-    function selectPlatform(p) {
-      currentPlatform = p;
-      const tabFb = document.getElementById('tabFb');
-      const tabOfferUp = document.getElementById('tabOfferUp');
-      const tabEbay = document.getElementById('tabEbay');
-      const notice = document.getElementById('tabHeadlineNotice');
-
-      [tabFb, tabOfferUp, tabEbay].forEach(b => {
+      [bFb, bOffer, bEbay].forEach(b => {
         b.className = "flex-1 py-2.5 text-xs font-medium rounded-xl transition text-slate-400 hover:text-slate-200";
       });
 
-      if (p === 'fb') {
-        tabFb.className = "flex-1 py-2.5 text-xs font-bold rounded-xl transition bg-slate-800 text-emerald-400 border border-slate-700";
-        notice.innerText = "Ready to copy & paste into Facebook Marketplace:";
-      } else if (p === 'offerup') {
-        tabOfferUp.className = "flex-1 py-2.5 text-xs font-bold rounded-xl transition bg-slate-800 text-emerald-400 border border-slate-700";
-        notice.innerText = "Ready to copy & paste into OfferUp:";
+      if (tab === 'fb') {
+        bFb.className = "flex-1 py-2.5 text-xs font-bold rounded-xl transition bg-slate-800 text-emerald-400 border border-slate-700";
+        headline.innerText = "Ready to copy & paste into Facebook Marketplace:";
+        copyContent.value = activeResult?.facebookMarketplaceCopy || "";
+      } else if (tab === 'offerup') {
+        bOffer.className = "flex-1 py-2.5 text-xs font-bold rounded-xl transition bg-slate-800 text-emerald-400 border border-slate-700";
+        headline.innerText = "Ready to copy & paste into OfferUp:";
+        copyContent.value = activeResult?.offerUpCopy || "";
       } else {
-        tabEbay.className = "flex-1 py-2.5 text-xs font-bold rounded-xl transition bg-slate-800 text-emerald-400 border border-slate-700";
-        notice.innerText = "SEO-Optimized eBay Title & Structured Description:";
-      }
-
-      updateCopyText();
-    }
-
-    function updateCopyText() {
-      if (!activeResult) return;
-      const area = document.getElementById('copyOutputArea');
-      const p = activeResult.prices;
-
-      if (currentPlatform === 'fb') {
-        area.value = `🏷️ ${activeResult.title}\n\n` +
-          `Condition: ${activeResult.condition}\n` +
-          `Price: $${p.target} (Cash or Zelle preferred)\n\n` +
-          `Details & Features:\n` +
-          `• ${activeResult.details}\n` +
-          `• Inspected, clean, and in proper working order\n` +
-          `• Stored in a smoke-free home\n\n` +
-          `📍 Pickup: Safe public location in local area (bank or grocery parking lot).\n` +
-          `💬 Serious buyers only please. Message with any questions!`;
-      } else if (currentPlatform === 'offerup') {
-        area.value = `${activeResult.title} - ${activeResult.condition}\n\n` +
-          `$${p.target} FIRM. Cash, Apple Pay, or Zelle only.\n\n` +
-          `${activeResult.details}\n` +
-          `Clean and tested. No trades, local pickup only.`;
-      } else {
-        area.value = `EBAY SEO TITLE (80 CHARACTERS):\n` +
-          `${activeResult.title.slice(0, 60)} Clean Fast Ship\n\n` +
-          `ITEM SPECIFICS:\n` +
-          `Brand/Item: ${activeResult.title}\n` +
-          `Condition: Pre-Owned - ${activeResult.condition}\n` +
-          `Category: ${activeResult.category}\n\n` +
-          `DESCRIPTION:\n` +
-          `Up for sale is a genuine ${activeResult.title}. ${activeResult.details}\n\n` +
-          `Carefully packed and shipped with tracking provided within 24 hours of payment.`;
+        bEbay.className = "flex-1 py-2.5 text-xs font-bold rounded-xl transition bg-slate-800 text-emerald-400 border border-slate-700";
+        headline.innerText = "SEO-Optimized eBay Title & Structured Description:";
+        copyContent.value = `EBAY SEO TITLE (80 CHARACTERS):\n${activeResult?.ebayTitle || ""}\n\nITEM SPECIFICS & DESCRIPTION:\n${activeResult?.ebayDescription || ""}`;
       }
     }
 
-    function copyActiveCopy() {
-      const area = document.getElementById('copyOutputArea');
-      area.select();
+    function copyCurrentCopy() {
+      const copyContent = document.getElementById('copyContent');
+      copyContent.select();
       document.execCommand('copy');
 
-      const label = document.getElementById('copyBtnLabel');
-      label.innerText = "✓ Copied to Clipboard!";
-      setTimeout(() => { label.innerText = "Copy Listing Text"; }, 2000);
+      const btnText = document.getElementById('copyBtnText');
+      btnText.innerText = "✓ Copied to Clipboard!";
+      setTimeout(() => { btnText.innerText = "Copy Listing Text"; }, 2000);
     }
 
-    function copyAllTags() {
-      if (!activeResult) return;
-      const text = activeResult.tags.map(t => `#${t}`).join(' ');
+    function copyTags() {
+      if (!activeResult?.recommendedTags) return;
+      const text = activeResult.recommendedTags.map(t => `#${t}`).join(' ');
       const temp = document.createElement('textarea');
       temp.value = text;
       document.body.appendChild(temp);
       temp.select();
       document.execCommand('copy');
       temp.remove();
-      alert("Algorithm tags copied to clipboard!");
+
+      const tags = document.getElementById('tagsList');
+      const orig = tags.innerHTML;
+      tags.innerHTML = '<span class="text-xs text-emerald-400 font-bold py-1">✓ All tags copied!</span>';
+      setTimeout(() => { tags.innerHTML = orig; }, 1500);
     }
 
     function downloadStudioImage() {
-      const canvas = document.getElementById('studioPhotoCanvas');
+      if (!activeStudioImage) return;
       const link = document.createElement('a');
-      link.download = `FlipGenius-Studio-${Date.now()}.png`;
-      link.href = canvas.toDataURL('image/png');
+      link.download = `FlipGenius-${Date.now()}.png`;
+      link.href = activeStudioImage;
       link.click();
     }
   </script>
